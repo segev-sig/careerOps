@@ -31,6 +31,7 @@ interface Application {
   notes?: string;
   created_at: string;
   updated_at: string;
+  applied_from:string;
 }
 
 const Dashboard = () => {
@@ -83,10 +84,14 @@ const Dashboard = () => {
     positionTitle: string;
     status: 'applied' | 'interview' | 'offer' | 'rejected';
     appliedDate: string;
+    appliedFrom: string;
     notes?: string;
   }) => {
     try {
-      await api.post('/api/applications', applicationData);
+      await api.post('/api/applications', {
+        ...applicationData,
+        appliedfrom: applicationData.appliedFrom, // Convert to backend format
+      });
       setShowForm(false);
       await fetchApplications();
       await fetchDashboardData(); // Refresh stats
@@ -100,12 +105,16 @@ const Dashboard = () => {
     positionTitle: string;
     status: 'applied' | 'interview' | 'offer' | 'rejected';
     appliedDate: string;
+    appliedFrom: string;
     notes?: string;
   }) => {
     if (!editingApplication) return;
 
     try {
-      await api.put(`/api/applications/${editingApplication.id}`, applicationData);
+      await api.put(`/api/applications/${editingApplication.id}`, {
+        ...applicationData,
+        appliedfrom: applicationData.appliedFrom, // Convert to backend format
+      });
       setEditingApplication(null);
       setShowForm(false);
       await fetchApplications();
@@ -245,6 +254,7 @@ const Dashboard = () => {
                   status: editingApplication.status,
                   appliedDate: editingApplication.applied_date,
                   notes: editingApplication.notes,
+                  appliedFrom:editingApplication.applied_from,
                 }
               : null
           }

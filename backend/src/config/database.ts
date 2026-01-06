@@ -63,6 +63,11 @@ export const initDatabase = async () => {
       )
     `);
 
+    await pool.query(`
+      ALTER TABLE job_applications
+      ADD COLUMN IF NOT EXISTS applied_from VARCHAR(255) DEFAULT 'unknown'
+    `);
+
     console.log('Database tables initialized successfully');
   } catch (error) {
     console.error('Error initializing database:', error);
