@@ -53,6 +53,9 @@ async function generateCoverLetter(req: CoverLetterRequest): Promise<string> {
   const prompt = `
 You are a professional career coach.
 Generate a cover letter in a ${tone} tone.
+the cover letter need to be Short and precise for the job 
+4-5 lines
+A little information about the submitter 
 
 CV:
 ${req.cvText}
