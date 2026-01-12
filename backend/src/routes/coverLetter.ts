@@ -51,20 +51,20 @@ async function generateCoverLetter(req: CoverLetterRequest): Promise<string> {
   const tone = req.tone || "professional";
 
   const prompt = `
-You are a professional career coach.
-Generate a cover letter in a ${tone} tone.
-the cover letter need to be Short and precise for the job 
-4-5 lines
-A little information about the submitter 
+    You are a professional career coach.
+    Generate a cover letter in a ${tone} tone.
+    the cover letter need to be Short and precise for the job 
+    4-5 lines
+    A little information about the submitter 
 
-CV:
-${req.cvText}
+    CV:
+    ${req.cvText}
 
-Job Description:
-${req.jobDescription}
+    Job Description:
+    ${req.jobDescription}
 
-Cover Letter:
-`;
+    Cover Letter:
+  `;
 
   const response = await client.chat.completions.create({
     model: "gpt-4o-mini",
