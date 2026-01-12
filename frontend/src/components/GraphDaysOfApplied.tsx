@@ -12,13 +12,15 @@ interface Props {
 
 export function DailyActivityChart({ data }: Props) {
   return (
-    <div>
+    <div style={{
+        width: "50%",
+    }}>
     <div
     className="head"
     style={{
         textAlign: "center",
         marginTop: "3rem",
-        fontSize: "3rem",
+        fontSize: "1.5rem",
     }}
     >
     Applications Sent per Day
