@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import ApplicationForm from '../components/ApplicationForm';
 import ApplicationsList from '../components/ApplicationsList';
+import {DailyActivityChart} from '../components/GraphDaysOfApplied';
 import './Dashboard.css';
 
 interface DashboardData {
@@ -34,6 +35,11 @@ interface Application {
   applied_from:string;
 }
 
+type DailyStats = {
+  date: string;
+  count: number;
+};
+
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -47,6 +53,28 @@ const Dashboard = () => {
   const [jobDescription, setJobDescription] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [loading, setLoading] = useState(false);
+  const [dailyData, setDailyData] = useState<DailyStats[]>([]);
+
+useEffect(() => {
+  if (applications.length > 0) {
+    const countMap: Record<string, number> = {};
+
+    applications.forEach(job => {
+      const date = job.applied_date.split("T")[0];
+      if (countMap[date]) {
+        countMap[date] += 1;
+      } else {
+        countMap[date] = 1;
+      }
+    });
+
+    const stats: DailyStats[] = Object.entries(countMap)
+      .map(([date, count]) => ({ date, count }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    setDailyData(stats);
+  }
+}, [applications]);
 
   useEffect(() => {
     if (!user) {
@@ -188,6 +216,8 @@ const Dashboard = () => {
     );
   }
 
+
+
   const displayName = dashboardData?.user.firstName
     ? `${dashboardData.user.firstName} ${dashboardData.user.lastName || ''}`.trim()
     : dashboardData?.user.email || 'User';
@@ -230,6 +260,9 @@ const Dashboard = () => {
               <div className="stat-label">Rejections</div>
             </div>
           </div>
+          <DailyActivityChart
+          data={dailyData}
+          />
         </section>
         <section className="applications-section">
           <div className="section-header">

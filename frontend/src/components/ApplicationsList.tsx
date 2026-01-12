@@ -57,8 +57,6 @@ const ApplicationsList = ({ applications, onEdit, onDelete }: ApplicationsListPr
     );
   }
 
-  console.log(applications)
-
   return (
     <div className="applications-list">
       {applications.map((app) => (
